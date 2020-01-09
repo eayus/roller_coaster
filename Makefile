@@ -9,7 +9,7 @@ clean:
 	rm bin/main
 
 
-bin/main: main.o shader_program.o application.o camera.o roller_coaster.o cart.o cart_camera.o globals.o free_camera.o
+bin/main: main.o shader_program.o application.o camera.o roller_coaster.o cart.o cart_camera.o globals.o free_camera.o ground.o
 	clang++ $^ -o bin/main -lGL -lglfw -lGLEW -lboost_filesystem -g -std=c++17
 
 main.o: src/main.cpp
@@ -40,4 +40,7 @@ globals.o: src/globals.cpp src/globals.cpp
 	clang++ -std=c++17 -I src -I libs -c $< -g
 
 free_camera.o: src/free_camera.cpp src/free_camera.hpp
+	clang++ -std=c++17 -I src -I libs -c $< -g
+
+ground.o: src/ground.cpp src/ground.hpp
 	clang++ -std=c++17 -I src -I libs -c $< -g

@@ -17,7 +17,14 @@ constexpr size_t ESTIMATED_TRACK_INDICES
     = (STRAIGHT_TRACK.indices.size() + CURVED_TRACK.indices.size()) / 2;
 
 
-RollerCoaster::RollerCoaster(const char* filepath) {
+RCDims::RCDims(int min_x, int max_x, int min_z, int max_z)
+    : min_x(min_x)
+    , max_x(max_x)
+    , min_z(min_z)
+    , max_z(max_z) {}
+
+
+RollerCoaster::RollerCoaster(const char* filepath) : dims(0, 0, 0, 0) {
     std::vector<TrackType> track_sequence;
     parse_track_sequence(filepath, track_sequence);
 
@@ -32,6 +39,7 @@ RollerCoaster::RollerCoaster(const char* filepath) {
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3)));
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(2 * sizeof(glm::vec3)));
+
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
@@ -67,6 +75,13 @@ void RollerCoaster::calculate_path(const std::vector<TrackType>& track_sequence)
     Direction facing = Direction::Up;
 
     for (auto track : track_sequence) {
+        // Calculate sizes
+        if (next_track_pos.x < this->dims.min_x) this->dims.min_x = next_track_pos.x;
+        if (next_track_pos.x > this->dims.max_x) this->dims.max_x = next_track_pos.x;
+        if (next_track_pos.z < this->dims.min_z) this->dims.min_z = next_track_pos.z;
+        if (next_track_pos.z > this->dims.max_z) this->dims.max_z = next_track_pos.z;
+
+        // Calculate Path Stuff
         TrackSegment track_seg;
         track_seg.type = track;
         track_seg.position = next_track_pos;
@@ -142,4 +157,9 @@ void RollerCoaster::load_buffers(const std::vector<TrackType>& track_sequence) {
     );
 
     this->num_indices = indices.size();
+}
+
+
+const RCDims& RollerCoaster::get_dims() const {
+    return this->dims;
 }
