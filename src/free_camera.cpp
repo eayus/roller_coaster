@@ -50,8 +50,8 @@ void FreeCamera::handle_inputs(GLFWwindow& window) {
     this->last_cursor_y = new_cursor_y;
 
     // Update yaw/pitch
-    this->yaw += glm::radians(static_cast<float>(delta_cursor_x) * 0.5f);
-    this->pitch += glm::radians(static_cast<float>(-delta_cursor_y) * 0.5f);
+    this->yaw += glm::radians(static_cast<float>(delta_cursor_x) * FREE_CAMERA_SENSITIVITY);
+    this->pitch += glm::radians(static_cast<float>(-delta_cursor_y) * FREE_CAMERA_SENSITIVITY);
 
     this->pitch = glm::clamp(this->pitch, glm::radians(-89.9f), glm::radians(89.9f));
 

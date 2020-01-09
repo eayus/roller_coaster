@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
 
+constexpr float FREE_CAMERA_SENSITIVITY = 0.3f;
+
 class FreeCamera {
 public:
 	FreeCamera(const glm::vec3& initial_position, GLFWwindow& window);
