@@ -9,7 +9,7 @@ clean:
 	rm bin/main
 
 
-bin/main: main.o shader_program.o application.o camera.o roller_coaster.o cart.o cart_camera.o globals.o free_camera.o ground.o
+bin/main: main.o shader_program.o application.o camera.o roller_coaster.o cart.o cart_camera.o globals.o free_camera.o ground.o textures.o screen_texture_renderer.o virtual_screen.o
 	clang++ $^ -o bin/main -lGL -lglfw -lGLEW -lboost_filesystem -g -std=c++17
 
 main.o: src/main.cpp
@@ -43,4 +43,13 @@ free_camera.o: src/free_camera.cpp src/free_camera.hpp
 	clang++ -std=c++17 -I src -I libs -c $< -g
 
 ground.o: src/ground.cpp src/ground.hpp
+	clang++ -std=c++17 -I src -I libs -c $< -g
+
+textures.o: src/textures.cpp
+	clang++ -std=c++17 -I src -I libs -c $< -g
+
+screen_texture_renderer.o: src/screen_texture_renderer.cpp src/screen_texture_renderer.hpp
+	clang++ -std=c++17 -I src -I libs -c $< -g
+
+virtual_screen.o: src/virtual_screen.cpp src/virtual_screen.hpp
 	clang++ -std=c++17 -I src -I libs -c $< -g

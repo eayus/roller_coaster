@@ -1,1 +1,8 @@
+NONE OF THE FOLLOWING ARE MY OWN WORK.
+
 static_math library used from here: https://github.com/Morwenn/static_math
+
+textures are public domain, acquired from here: https://cc0textures.com/view?tex=Ground03
+https://cc0textures.com/view?tex=Marble05
+
+texture loading "stb_image.h" acquired from here: https://github.com/nothings/stb/blob/master/stb_image.h
