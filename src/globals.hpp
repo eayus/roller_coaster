@@ -10,4 +10,6 @@ namespace globals {
     };
 
     extern WindowDimensions WINDOW_DIMS;
+    
+    extern bool mouse_just_clicked;
 }

@@ -4,14 +4,15 @@ in vec3 f_position;
 in vec3 f_normal;
 in vec3 f_color;
 
-out vec3 color;
+out vec4 color;
 
 uniform vec3 camera_position;
+uniform vec3 light_position;
 
 void main() {
     /* Requires that f_normal is normalized. */
 
-    vec3 light_dir = normalize(vec3(0.3, 1.0, 0.175));    // light direction is "backwards"
+    vec3 light_dir = normalize(light_position/*vec3(0.3, 1.0, 0.175)*/);    // light direction is "backwards"
 
     // Ambient
     float ambient = 0.3;
@@ -26,5 +27,5 @@ void main() {
     
 
     float total = min(ambient + diffuse + specular, 1.0);
-    color = f_color * total;
+    color = vec4(f_color * total, 1.0);
 }

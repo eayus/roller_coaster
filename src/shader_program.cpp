@@ -27,6 +27,11 @@ void ShaderProgram::bind() {
     glUseProgram(this->program);
 }
 
+void ShaderProgram::set_uniform_float(const char* name, float val) {
+    GLint loc = glGetUniformLocation(this->program, name);
+    glUniform1f(loc, val);
+}
+
 void ShaderProgram::set_uniform_vec3(const char* name, const glm::vec3& val) {
     GLint loc = glGetUniformLocation(this->program, name);
     glUniform3fv(loc, 1, &val[0]);

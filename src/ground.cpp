@@ -65,6 +65,7 @@ Ground Ground::underneath_coaster(const RollerCoaster& rc) {
     std::vector<Index> indices;
 
 
+    // Top Face
     for (int j = 1; j < num_vert; j++) {
         for (int i = 1; i < num_horiz; i++) {
             Index index_offset = static_cast<Index>(vertices.size());
@@ -119,23 +120,156 @@ Ground Ground::underneath_coaster(const RollerCoaster& rc) {
         }
     }
 
+
+    // Back Side
+    for (int i = 1; i < num_horiz; i++) {
+        const auto t1 = points.at(i - 1);
+        const auto t2 = points.at(i);
+
+        auto b1 = t1;
+        b1.y = y - GROUND_HEIGHT;
+
+        auto b2 = t2;
+        b2.y = y - GROUND_HEIGHT;
+
+        Index index_offset = static_cast<Index>(vertices.size());
+
+        glm::vec3 normal(0, 0, -1);
+
+        vertices.emplace_back(t1, normal, STONE_COLOR);
+        vertices.emplace_back(t2, normal, STONE_COLOR);
+        vertices.emplace_back(b1, normal, STONE_COLOR);
+        vertices.emplace_back(b2, normal, STONE_COLOR);
+
+        indices.push_back(index_offset + 0);
+        indices.push_back(index_offset + 2);
+        indices.push_back(index_offset + 1);
+
+        indices.push_back(index_offset + 2);
+        indices.push_back(index_offset + 3);
+        indices.push_back(index_offset + 1);
+    }
+
+    // Front Side
+    for (int i = 1; i < num_horiz; i++) {
+        const auto t1 = points.at(((num_vert - 1) * num_horiz) + i - 1);
+        const auto t2 = points.at(((num_vert - 1) * num_horiz) + i);
+
+        auto b1 = t1;
+        b1.y = y - GROUND_HEIGHT;
+
+        auto b2 = t2;
+        b2.y = y - GROUND_HEIGHT;
+
+        Index index_offset = static_cast<Index>(vertices.size());
+
+        glm::vec3 normal(0, 0, 1);
+
+        vertices.emplace_back(t1, normal, STONE_COLOR);
+        vertices.emplace_back(t2, normal, STONE_COLOR);
+        vertices.emplace_back(b1, normal, STONE_COLOR);
+        vertices.emplace_back(b2, normal, STONE_COLOR);
+
+        indices.push_back(index_offset + 0);
+        indices.push_back(index_offset + 2);
+        indices.push_back(index_offset + 1);
+
+        indices.push_back(index_offset + 2);
+        indices.push_back(index_offset + 3);
+        indices.push_back(index_offset + 1);
+    }
+
+    // Left
+    for (int i = 1; i < num_vert; i++) {
+        const auto t1 = points.at((i - 1) * num_horiz);
+        const auto t2 = points.at(i * num_horiz);
+
+        auto b1 = t1;
+        b1.y = y - GROUND_HEIGHT;
+
+        auto b2 = t2;
+        b2.y = y - GROUND_HEIGHT;
+
+        Index index_offset = static_cast<Index>(vertices.size());
+
+        glm::vec3 normal(-1, 0, 0);
+
+        vertices.emplace_back(t1, normal, STONE_COLOR);
+        vertices.emplace_back(t2, normal, STONE_COLOR);
+        vertices.emplace_back(b1, normal, STONE_COLOR);
+        vertices.emplace_back(b2, normal, STONE_COLOR);
+
+        indices.push_back(index_offset + 0);
+        indices.push_back(index_offset + 2);
+        indices.push_back(index_offset + 1);
+
+        indices.push_back(index_offset + 2);
+        indices.push_back(index_offset + 3);
+        indices.push_back(index_offset + 1);
+    }
+
+    // Right
+    for (int i = 1; i < num_vert; i++) {
+        const auto t1 = points.at(((i - 1) * num_horiz) + (num_horiz - 1));
+        const auto t2 = points.at((i * num_horiz) + (num_horiz - 1));
+
+        auto b1 = t1;
+        b1.y = y - GROUND_HEIGHT;
+
+        auto b2 = t2;
+        b2.y = y - GROUND_HEIGHT;
+
+        Index index_offset = static_cast<Index>(vertices.size());
+
+        glm::vec3 normal(1, 0, 0);
+
+        vertices.emplace_back(t1, normal, STONE_COLOR);
+        vertices.emplace_back(t2, normal, STONE_COLOR);
+        vertices.emplace_back(b1, normal, STONE_COLOR);
+        vertices.emplace_back(b2, normal, STONE_COLOR);
+
+        indices.push_back(index_offset + 0);
+        indices.push_back(index_offset + 2);
+        indices.push_back(index_offset + 1);
+
+        indices.push_back(index_offset + 2);
+        indices.push_back(index_offset + 3);
+        indices.push_back(index_offset + 1);
+    }
+
+    // Bottom
+    const float bottom_y = y - GROUND_HEIGHT;
+    {
+        const auto real_left = points.at(0).x;
+        const auto real_right = points.at(num_horiz - 1).x;
+        const auto real_back = points.at(0).z;
+        const auto real_front = points.at(num_horiz * (num_vert - 1)).z;
+        Index index_offset = static_cast<Index>(vertices.size());
+
+        const glm::vec3 normal(0, -1, 0);
+        vertices.emplace_back(glm::vec3(real_left, bottom_y, real_back), normal, STONE_COLOR);
+        vertices.emplace_back(glm::vec3(real_left, bottom_y, real_front), normal, STONE_COLOR);
+        vertices.emplace_back(glm::vec3(real_right, bottom_y, real_back), normal, STONE_COLOR);
+        vertices.emplace_back(glm::vec3(real_right, bottom_y, real_front), normal, STONE_COLOR);
+
+        indices.push_back(index_offset + 0);
+        indices.push_back(index_offset + 1);
+        indices.push_back(index_offset + 2);
+
+        indices.push_back(index_offset + 1);
+        indices.push_back(index_offset + 2);
+        indices.push_back(index_offset + 3);
+    }
+
+
+
+
+
+
+
     grnd.num_indices = indices.size();
 
 
-    /*std::array<glm::vec3, 3 * 4> vertices = { // pos, normal, color
-        // Top Face
-        glm::vec3(left, y, back), glm::vec3(0, 1, 0), GRASS_COLOR,
-        glm::vec3(left, y, front), glm::vec3(0, 1, 0), GRASS_COLOR,
-        glm::vec3(right, y, back), glm::vec3(0, 1, 0), GRASS_COLOR,
-        glm::vec3(right, y, front), glm::vec3(0, 1, 0), GRASS_COLOR,
-    };
-
-    std::array<unsigned short, 6> indices = {
-        // Top Face
-        0, 1, 2, 1, 3, 2
-    };*/
-
-    
     glBindBuffer(GL_ARRAY_BUFFER, grnd.vertex_buffer);
     glBufferData(
         GL_ARRAY_BUFFER,

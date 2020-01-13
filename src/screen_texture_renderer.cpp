@@ -6,6 +6,14 @@ ScreenTextureRenderer::ScreenTextureRenderer()
         VertexShader::from_filepath("res/shaders/screen_texture.vert"),
         FragmentShader::from_filepath("res/shaders/screen_texture.frag")
     )
+    , blur_shader_horiz(
+        VertexShader::from_filepath("res/shaders/screen_texture_blur_horiz.vert"),
+        FragmentShader::from_filepath("res/shaders/screen_texture_blur_horiz.frag")
+    )
+    , blur_shader_verti(
+        VertexShader::from_filepath("res/shaders/screen_texture_blur_verti.vert"),
+        FragmentShader::from_filepath("res/shaders/screen_texture_blur_verti.frag")
+    )
 {
     glGenVertexArrays(1, &this->vao);
     glGenBuffers(1, &this->vertex_buffer);
@@ -38,8 +46,14 @@ ScreenTextureRenderer::ScreenTextureRenderer()
     );
 }
 
-void ScreenTextureRenderer::draw_texture(GLuint texture) {
-    this->shader_prog.bind();
+void ScreenTextureRenderer::draw_texture(Blur blur) {
+    switch (blur) {
+        case Blur::Horizontal: this->blur_shader_horiz.bind(); break;
+        case Blur::Vertical: this->blur_shader_verti.bind(); break;
+        case Blur::None: this->shader_prog.bind(); break;
+    }
+
     glBindVertexArray(this->vao);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindVertexArray(0);
 }

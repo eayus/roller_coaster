@@ -7,4 +7,6 @@ namespace globals {
     }
 
     WindowDimensions WINDOW_DIMS;
+
+    bool mouse_just_clicked = false;
 }
