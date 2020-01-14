@@ -203,7 +203,11 @@ void Application::main_loop() {
         }
 
 
-        for (auto& cart : carts) cart.update();
+        carts.at(0).update();
+        //for (auto& cart : carts) cart.update();
+        for (int i = 1; i < carts.size(); i++) {
+            carts.at(i).update_behind(carts.at(i - 1));
+        }
         auto cart_pos = carts[0].calc_position();
 
     

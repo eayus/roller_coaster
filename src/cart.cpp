@@ -80,9 +80,13 @@ void Cart::draw(ShaderProgram& sp) {
 }
 
 void Cart::update() {
-    const float distance_per_frame = 0.02f;
+//    const float distance_per_frame = 0.02f;
 
     const auto track_type = this->track_sequence.at(this->track_num).type;
+
+    const float distance_per_frame = track_type == TrackType::SlopeDown ? 0.045f
+                                   : track_type == TrackType::SlopeUp ? 0.02f
+                                   : 0.03f;
 
     const auto track_len = tracks::length(track_type);
 
@@ -93,6 +97,23 @@ void Cart::update() {
         if (this->track_num == this->track_sequence.size()) {
             this->track_num = 0;
         }
+    }
+}
+
+void Cart::update_behind(const Cart& cart_in_front) {
+    const float cart_gap = 1.2f;
+
+    this->track_num = cart_in_front.track_num;
+    this->excess_distance = cart_in_front.excess_distance - cart_gap;
+
+    while (this->excess_distance < 0.0f) {
+
+        this->track_num = this->track_num == 0 ? this->track_sequence.size() - 1 : this->track_num - 1;
+
+        const auto track_type = this->track_sequence.at(this->track_num).type;
+        const auto track_len = tracks::length(track_type);
+
+        this->excess_distance = track_len + excess_distance;
     }
 }
 

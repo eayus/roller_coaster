@@ -12,6 +12,7 @@ public:
     Cart(const std::vector<TrackSegment>& track_sequence);
     static Cart behind(const Cart& cart_in_front);
     void update();
+    void update_behind(const Cart& cart_in_front);
     void draw(ShaderProgram& sp);
     glm::vec3 calc_position() const;
     Rotation calc_rotation() const;
