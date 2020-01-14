@@ -1,11 +1,23 @@
-NONE OF THE FOLLOWING ARE MY OWN WORK.
-
-static_math library used from here: https://github.com/Morwenn/static_math
-
-textures are public domain, acquired from here: https://cc0textures.com/view?tex=Ground03
-https://cc0textures.com/view?tex=Marble05
-
-texture loading "stb_image.h" acquired from here: https://github.com/nothings/stb/blob/master/stb_image.h
+I have used some external libraries, which are NOT MY OWN WORK. Below I have listed the used
+libraries and justified their use within the project. The libraries can be found in the "libs"
+directory.
 
 
-TODO: add clang to path
+GCEM:
+    acquired from here: https://github.com/kthohr/gcem
+    
+    Is used to compute trigonometry function at compile time, the standard library implementations
+    of sin/cos are not marked "constexpr"
+
+
+GLFW:
+    installed on DCS machines
+
+    Is used as a more modern and minimal alternative to glut, used for window creation and opengl
+    context creation.
+
+
+STB_image:
+    acquire from here: https://github.com/nothings/stb/blob/master/stb_image.h
+
+    Used to load a png image from a file into a byte buffer. Does no OpenGL.
