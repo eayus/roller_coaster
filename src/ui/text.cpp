@@ -17,6 +17,7 @@ Text::Text(std::string s, Font& font, glm::vec2 position)
         glEnableVertexAttribArray(1);
     glBindVertexArray(0);
 
+    // Calculate the vertices from the font
     std::vector<FontVertex> vertices = font.text_vertices(
         s,
         position

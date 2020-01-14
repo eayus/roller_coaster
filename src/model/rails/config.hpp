@@ -2,6 +2,10 @@
 
 #include <glm/glm.hpp>
 
+// File containing configuration information about the track models.
+// This allows for easy adjustment, especially when compared to if
+// the models were created separately in a modelling application.
+
 // The "Rails" are the metal runners that the rollercoaster slides on
 // The "Beams" are the horizontal bars that connect the two rails
 // The "Track" is the rails + beams

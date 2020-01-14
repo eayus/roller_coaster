@@ -14,10 +14,24 @@
 #include <tracks/curved.hpp>
 
 #include <model/track_type.hpp>
+#include <iostream>
+#include <cstdlib>
 
+// Data in this file is a declarative representaiton of the different tracks in the
+// roller coaster. It defines what tracks there are, their models, and the function
+// which determines the cart's position on the track.
+
+
+// Position function takes the percentage we are through the track
 using PositionFunc = glm::vec3 (*)(float);
+
+// Rotation function takes the percentage we are through the track, in addition to the
+// types of tracks in front and behind. This is to allow smooth easing between the
+// different rotations of two adjacent tracks
 using RotationFunc = Rotation (*)(float, TrackType, TrackType);
 
+
+// Struct containing everything we need to know about a track
 struct TrackData {
     constexpr TrackData(ModelRef model, PositionFunc calc_position, RotationFunc calc_rotation, float length, std::pair<glm::ivec3, Direction> relative_finish)
         : model(model)
@@ -26,14 +40,16 @@ struct TrackData {
         , length(length)
         , relative_finish(relative_finish) {}
 
-    ModelRef model;
-    PositionFunc calc_position;
-    RotationFunc calc_rotation;
-    float length;
-    std::pair<glm::ivec3, Direction> relative_finish; // pos, dir
+    ModelRef model;              // Track's model
+    PositionFunc calc_position;  // Function to calculate position on the trackl
+    RotationFunc calc_rotation;  // ditto for rotation
+    float length;                // total track length
+    std::pair<glm::ivec3, Direction> relative_finish; // After placing this track, where and with what direction should the next track be placed?
 };
 
 namespace tracks {
+
+    // All of the actual declarative data for each track type.
 
 
     constexpr TrackData FORWARD_DATA = TrackData(
@@ -82,6 +98,9 @@ namespace tracks {
         if (name == "curve_right") return TrackType::CurveRight;
         if (name == "slope_up") return TrackType::SlopeUp;
         if (name == "slope_down") return TrackType::SlopeDown;
+
+        std::cerr << "TRACK PARSE ERROR: expected on of: [forward, curve_left, curve_right, slope_up, slope_down], instead encountered " << name << "!" << std::endl;
+        std::exit(EXIT_FAILURE);
 
         return boost::none;
     }

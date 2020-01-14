@@ -9,7 +9,7 @@ clean:
 	rm bin/main
 
 
-bin/main: main.o shader_program.o application.o camera.o roller_coaster.o cart.o cart_camera.o globals.o free_camera.o ground.o textures.o screen_texture_renderer.o virtual_screen.o font.o text.o button.o shadow_map.o
+bin/main: main.o shader_program.o application.o roller_coaster.o cart.o cart_camera.o globals.o free_camera.o ground.o textures.o screen_texture_renderer.o virtual_screen.o font.o text.o button.o
 	clang++ $^ -o bin/main -lGL -lglfw -lGLEW -lboost_filesystem -g -std=c++17
 
 main.o: src/main.cpp
@@ -19,9 +19,6 @@ application.o: src/application.cpp
 	clang++ -std=c++17 -I src -I libs -c $^ -g
 
 shader_program.o: src/shader_program.cpp
-	clang++ -std=c++17 -I src -I libs -c $^ -g
-
-camera.o: src/camera.cpp
 	clang++ -std=c++17 -I src -I libs -c $^ -g
 
 models.o: src/models.cpp
@@ -61,7 +58,4 @@ text.o: src/ui/text.cpp src/ui/text.hpp
 	clang++ -std=c++17 -I src -I libs -c $< -g
 
 button.o: src/ui/button.cpp src/ui/button.hpp
-	clang++ -std=c++17 -I src -I libs -c $< -g
-
-shadow_map.o: src/shadow_map.cpp src/shadow_map.hpp
 	clang++ -std=c++17 -I src -I libs -c $< -g

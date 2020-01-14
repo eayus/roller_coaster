@@ -4,6 +4,7 @@
 #include <iostream>
 
 VirtualScreen::VirtualScreen() {
+    // Gen fraembuffer, texture and renderbuffer
     glGenFramebuffers(1, &this->frame_buffer);
     glGenTextures(1, &this->texture);
     glGenRenderbuffers(1, &this->render_buffer);
@@ -24,7 +25,7 @@ VirtualScreen::VirtualScreen() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     
-    // Make renderbuffer
+    // Make renderbuffer, for storing depth and stencil information.
     glBindRenderbuffer(GL_RENDERBUFFER, this->render_buffer);
     glRenderbufferStorage(
         GL_RENDERBUFFER,

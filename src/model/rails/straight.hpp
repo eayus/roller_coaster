@@ -4,6 +4,8 @@
 #include <model/transform.hpp>
 #include <model/rails/config.hpp>
 
+// function to generate the model for a straight track.
+
 
 constexpr auto make_straight_rail() {
     float right_edge = TRACK_WIDTH / 2.0f;

@@ -7,6 +7,9 @@
 
 #include <model/rails/path.hpp>
 
+// Contains configuration information for the curved track. Such as the position and
+// rotation caluclation functions
+
 namespace tracks::curved {
     namespace left {
         constexpr auto MODEL = rotate_270(CURVED_TRACK);

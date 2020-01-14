@@ -4,6 +4,8 @@
 #include <array>
 #include <gcem/gcem.hpp>
 
+// Miscelaneous math functions
+
 constexpr void rotate_vec_right(glm::vec3& vec) {
     // (x, y, z) -> (-z, y, x)
     float tmp = vec.x;
@@ -61,6 +63,7 @@ constexpr float magnitude(glm::vec3 a) {
 }
 
 
+// Direction class
 enum class Direction {
     Up = 0,
     Right = 1,
@@ -68,6 +71,8 @@ enum class Direction {
     Left = 3,
 };
 
+
+// Combine two directions into a single one
 constexpr Direction concat_directions(Direction dir1, Direction dir2) {
     const auto x = static_cast<unsigned int>(dir1) + static_cast<unsigned int>(dir2);
     return static_cast<Direction>(x % 4);

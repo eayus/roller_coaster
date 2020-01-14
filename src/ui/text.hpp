@@ -5,6 +5,8 @@
 #include <ui/font.hpp>
 #include <glm/glm.hpp>
 
+// Class repersenting a text string, rendered with a given font
+
 class Text {
 public:
     Text(std::string s, Font& font, glm::vec2 position);

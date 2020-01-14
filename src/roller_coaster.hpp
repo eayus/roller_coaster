@@ -8,6 +8,8 @@
 #include <track.hpp>
 #include <cart.hpp>
 
+// Struct representing the dimenions of a roller coaster. We don't bother storing height information
+// since it would not be used.
 struct RCDims {
     RCDims(int min_x, int max_x, int min_z, int max_z);
     int min_x;
@@ -18,21 +20,22 @@ struct RCDims {
 
 class RollerCoaster {
 public:
-    RollerCoaster(const char* filepath);
-    const std::vector<glm::vec3>& get_path() const;
+    RollerCoaster(const char* filepath);               // Create roller coaster from config file
+    const std::vector<glm::vec3>& get_path() const;    // Get access to our track info
     void draw();
     const RCDims& get_dims() const;
 
-    Cart add_cart();
+    Cart add_cart();                                   // Add a cart to the roller coaster
 
 private:
+    // Parse the config file
     static void parse_track_sequence(const char* filepath, std::vector<TrackType>& track_sequence);
-    void load_buffers(const std::vector<TrackType>& track_sequence);
-    void calculate_path(const std::vector<TrackType>& track_sequence);
+    void load_buffers(const std::vector<TrackType>& track_sequence);     // Generate vertices and fill the opengl buffers with them
+    void calculate_path(const std::vector<TrackType>& track_sequence);   // From the sequence of trakc types, calculate their positions
     
 
 private:
-    std::vector<TrackSegment> tracks;
+    std::vector<TrackSegment> tracks; // The track segments that make up the roller coaster
     RCDims dims;
 
     // OpenGL stuff

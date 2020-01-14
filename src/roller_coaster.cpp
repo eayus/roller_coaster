@@ -28,6 +28,7 @@ RollerCoaster::RollerCoaster(const char* filepath) : dims(0, 0, 0, 0) {
     std::vector<TrackType> track_sequence;
     parse_track_sequence(filepath, track_sequence);
 
+    // Generate buffers and arrays
     glGenVertexArrays(1, &this->vao);
     glGenBuffers(1, &this->vertex_buffer);
     glGenBuffers(1, &this->index_buffer);
@@ -60,6 +61,7 @@ void RollerCoaster::draw() {
 }
 
 void RollerCoaster::parse_track_sequence(const char* filepath, std::vector<TrackType>& track_sequence) {
+    // Read the file, and process each line one by one
     std::ifstream file_stream(filepath);
 
     std::string line;
@@ -71,9 +73,11 @@ void RollerCoaster::parse_track_sequence(const char* filepath, std::vector<Track
 void RollerCoaster::calculate_path(const std::vector<TrackType>& track_sequence) {
     this->tracks.reserve(track_sequence.size());
 
+    // Position to place next track
     glm::ivec3 next_track_pos(0);
-    Direction facing = Direction::Up;
+    Direction facing = Direction::Up; // Direction to place next track
 
+    // Iterate through seuqence
     for (auto track : track_sequence) {
         // Calculate sizes
         if (next_track_pos.x < this->dims.min_x) this->dims.min_x = next_track_pos.x;
@@ -101,6 +105,7 @@ void RollerCoaster::calculate_path(const std::vector<TrackType>& track_sequence)
 void RollerCoaster::load_buffers(const std::vector<TrackType>& track_sequence) {
     const size_t seq_len = track_sequence.size();
 
+    // Create vectors, and reserve an estimated size, so we don't constantly realloc
     std::vector<Index> indices;
     indices.reserve(seq_len * ESTIMATED_TRACK_VERTICES);
     std::vector<Vertex> vertices;
@@ -111,11 +116,13 @@ void RollerCoaster::load_buffers(const std::vector<TrackType>& track_sequence) {
 
     unsigned int num_vertices;
 
+    // Iterate sequence
     for (auto track : track_sequence) {
         auto model_data = tracks::model(track);
 
         num_vertices = vertices.size();
 
+        //  Add every vertex in the track model
         for (size_t i = 0; i < model_data.vertices_len; i++) {
             Vertex vertex = model_data.vertices_start[i];
 
@@ -127,11 +134,13 @@ void RollerCoaster::load_buffers(const std::vector<TrackType>& track_sequence) {
         }
 
 
+        // Add every index also
         for (size_t i = 0; i < model_data.indices_len; i++) {
             const Index index = model_data.indices_start[i];
             indices.push_back(index + num_vertices);
         }
 
+        // Calculate the position for the next track
         auto rel_fin = tracks::relative_finish(track);
         rotate_vec_by_dir(rel_fin.first, facing);
         next_track_pos += rel_fin.first;
@@ -140,6 +149,7 @@ void RollerCoaster::load_buffers(const std::vector<TrackType>& track_sequence) {
     }
 
 
+    // Fill buffers
     glBindBuffer(GL_ARRAY_BUFFER, this->vertex_buffer);
     glBufferData(
         GL_ARRAY_BUFFER,

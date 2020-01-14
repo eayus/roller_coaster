@@ -5,6 +5,8 @@
 #include <model/rails/config.hpp>
 #include <gcem/gcem.hpp>
 
+// Functions to generate the model for the sloped track.
+
 namespace sloped {
     enum class Side {
         Left,

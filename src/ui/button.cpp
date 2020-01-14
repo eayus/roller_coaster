@@ -5,6 +5,7 @@ Button::Button(glm::vec2 center_pos, glm::vec2 size)
     : center_pos(center_pos)
     , size(size)
 {
+    // Gen VAO, buffers etc
     glGenVertexArrays(1, &this->vao);
     glGenBuffers(1, &this->vertex_buffer);
 
@@ -23,6 +24,7 @@ Button::Button(glm::vec2 center_pos, glm::vec2 size)
 
     glm::vec3 color = MUSTARD_YELLOW;
     
+    // The rectangle for the button
     std::array<UIVertex, 6> vertices = {
         UIVertex { glm::vec2(center_pos - dx - dy), color }, // bottom_left
         UIVertex { glm::vec2(center_pos + dx + dy), color }, // top_right
@@ -51,6 +53,7 @@ void Button::draw() {
 
 
 bool Button::is_in_bounds(glm::vec2 point) {
+    // Simple bounds check from the AABB
     float min_x = this->center_pos.x - (this->size.x * 0.5f);
     float max_x = this->center_pos.x + (this->size.x * 0.5f);
 

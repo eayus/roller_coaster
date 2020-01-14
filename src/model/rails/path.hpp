@@ -9,6 +9,8 @@
 
 using std_extras::Array;
 
+// Utility file for defining what path the cart should take through the track
+
 struct Rotation {
     constexpr Rotation(float yaw, float pitch)
         : yaw(yaw)
@@ -70,74 +72,10 @@ constexpr Rotation sloped_track_rotation(float percent, TrackType prev_type, Tra
         0.0f,
         glm::radians(45.0f)
     );
-
-    /*percent *= 100.0f;
-
-    if (prev_type == TrackType::SlopeUp && next_type == TrackType::SlopeUp) {
-        return Rotation(
-            0.0f,
-            glm::radians(45.0f)
-        );
-    }
-
-    if (prev_type != TrackType::SlopeUp) {
-        if (percent <= 20.0f) {
-            float t = percent / 20.0f;
-
-            return Rotation(
-                0.0f,
-                glm::radians(45.0f) * t
-            );
-        }
-
-        return Rotation(0.0f, glm::radians(45.0f));
-    }
-
-    if (next_type != TrackType::SlopeUp) {
-        if (percent >= 80.0f) {
-            return Rotation(
-                0.0f,
-                glm::radians(45.0f) * (100.0f - percent) / 20.0f
-            );
-        }
-    }
-
-    if (percent <= 20.0f) {
-        float t = percent / 20.0f;
-
-        return Rotation(
-            0.0f,
-            glm::radians(45.0f) * t
-        );
-    }
-
-    if (percent >= 80.0f) {
-        return Rotation(
-            0.0f,
-            glm::radians(45.0f) * (100.0f - percent) / 20.0f
-        );
-    }
-    
-    return Rotation(
-        0.0f,
-        glm::radians(45.0f)
-    );*/
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-// Number of positions that make up a path, per rail
+/*// Number of positions that make up a path, per rail
 constexpr size_t NUM_PATH_SEGMENTS = 10;
 
 
@@ -157,4 +95,4 @@ constexpr Array<glm::vec3, 2> STRAIGHT_PATH = {
 
 // Curved Path
 constexpr float CURVED_PATH_RADIUS = TRACK_LENGTH / 2.0f;
-constexpr float CURVED_PATH_ANGLE_STEP = glm::radians(90.0f / static_cast<float>(NUM_PATH_SEGMENTS));
+constexpr float CURVED_PATH_ANGLE_STEP = glm::radians(90.0f / static_cast<float>(NUM_PATH_SEGMENTS));*/

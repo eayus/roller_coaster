@@ -6,6 +6,9 @@
 
 #include <model/rails/path.hpp>
 
+// Contains the configuration information for the sloped track segment, including the model,
+// rotaiton, and position calculation functions.
+
 namespace tracks::sloped {
     namespace down {
         constexpr auto MODEL = translate_model(rotate_180(SLOPED_TRACK), glm::vec3(0, -1, 0));
@@ -15,10 +18,12 @@ namespace tracks::sloped {
         }
 
         constexpr Rotation calc_rotation(float percent, TrackType prev_type, TrackType next_type) {
+            // If we are going from a track with a different elevation, we ease in.
             if (percent <= 0.2f && prev_type != TrackType::SlopeDown) {
                 return Rotation(0.0f, glm::radians(-45.0f) * percent / 0.2f);
             }
 
+            // If we are going to a track with a different elevation, we ease out.
             if (percent >= 0.8f && next_type != TrackType::SlopeDown) {
                 return Rotation(0.0f, glm::radians(-45.0f) * (1.0f - percent) / 0.2f);
             }

@@ -4,6 +4,10 @@
 #include <model/transform.hpp>
 #include <util.hpp>
 
+// Functions to create several primtiive models. The implementaiton is
+// fairly trivial, they are created through consturction of smaller
+// primitives
+
 constexpr Model<3, 3> make_triangle(
     glm::vec3 point1,
     glm::vec3 point2,

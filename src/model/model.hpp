@@ -1,6 +1,5 @@
 #pragma once
 
-//#include <array>
 #include <glm/glm.hpp>
 #include <std_extras/array.hpp>
 
@@ -8,6 +7,7 @@ using std_extras::Array;
 
 using Index = unsigned short;
 
+// A vertex in our models contains a position, normal vector, and color.
 struct Vertex {
     constexpr Vertex()
         : position(0, 0, 0)
@@ -23,6 +23,11 @@ struct Vertex {
     glm::vec3 position, normal, color;
 };
 
+
+// A model is a collection of vertices and indices. Since models can be variably
+// sized, we prameterise the amount of vertices and indices in the type of the
+// variable.
+//
 // NV = number of vertices, NI = number of indices
 template<size_t NV, size_t NI>
 struct Model {
@@ -31,14 +36,13 @@ struct Model {
         : vertices(vertices)
         , indices(indices) {}
 
-    /*constexpr static Model<0, 0> empty() {
-        return Model<0, 0>({}, {});
-    }*/
-
     Array<Vertex, NV> vertices;
     Array<Index, NI> indices;
 };
 
+
+// Wrapper class for a reference to a model of ANY size. Using the '&' operator
+// is not sufficient since we need to specify the generic size parameters
 struct ModelRef {
     template <size_t NV, size_t NI>
     constexpr ModelRef(const Model<NV, NI>& model)

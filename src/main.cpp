@@ -1,9 +1,7 @@
-#include <iostream>
 #include <application.hpp>
 
 int main() {
-    std::cout << "hello world!" << std::endl;
-
+    // Create instance of application class and run main loop
     Application app;
     app.main_loop();
 

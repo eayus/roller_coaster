@@ -10,6 +10,7 @@
 Ground Ground::underneath_coaster(const RollerCoaster& rc) {
     Ground grnd;
 
+    // Gen buffers and arrays and specify vertex format
     glGenVertexArrays(1, &grnd.vao);
     glGenBuffers(1, &grnd.vertex_buffer);
     glGenBuffers(1, &grnd.index_buffer);
@@ -44,6 +45,7 @@ Ground Ground::underneath_coaster(const RollerCoaster& rc) {
     int num_horiz = ceil((right - left) / SUBDIVIDE_SIZE);
     int num_vert = ceil((front - back) / SUBDIVIDE_SIZE);
 
+    // Subdivide whole plane into small segments, and offset the Y coord by a small amount.
     std::vector<glm::vec3> points;
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution(0, 50);
@@ -63,6 +65,12 @@ Ground Ground::underneath_coaster(const RollerCoaster& rc) {
 
     std::vector<Vertex> vertices;
     std::vector<Index> indices;
+
+
+    // Code to generate the faces from the points. Each face follows a similar structure.
+    // We iterate over pairs of vertices in the grid, and create triangles with the apporpriate
+    // normals. To give a better visual effect, we alternative the way we divide the grid
+    // square into triangles
 
 
     // Top Face
@@ -263,13 +271,11 @@ Ground Ground::underneath_coaster(const RollerCoaster& rc) {
 
 
 
-
-
-
-
+    // Store number of indices later for the draw call
     grnd.num_indices = indices.size();
 
 
+    // Fill OpenGL buffers with the vertices we just generated
     glBindBuffer(GL_ARRAY_BUFFER, grnd.vertex_buffer);
     glBufferData(
         GL_ARRAY_BUFFER,

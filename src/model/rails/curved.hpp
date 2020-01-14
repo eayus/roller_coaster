@@ -9,7 +9,11 @@
 
 using namespace std_extras;
 
-// TODO: face culling fails on curved rail bottom
+// This code generates the model for a curved track.
+// Roughly, we generate the coordinates of a curve
+// using sin and cos. We then the rails along this curve,
+// filling the gaps with bars.
+
 
 enum class Facing { In, Out };
 constexpr Array<float, 7> make_curve_sequence(float flat_radius) {

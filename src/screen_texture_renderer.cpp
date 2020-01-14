@@ -1,6 +1,7 @@
 #include <screen_texture_renderer.hpp>
 #include <array>
 
+// Init all the shaders
 ScreenTextureRenderer::ScreenTextureRenderer()
     : shader_prog(
         VertexShader::from_filepath("res/shaders/screen_texture.vert"),
@@ -15,6 +16,7 @@ ScreenTextureRenderer::ScreenTextureRenderer()
         FragmentShader::from_filepath("res/shaders/screen_texture_blur_verti.frag")
     )
 {
+    // Generate buffers with a simple quad in
     glGenVertexArrays(1, &this->vao);
     glGenBuffers(1, &this->vertex_buffer);
 
@@ -27,6 +29,7 @@ ScreenTextureRenderer::ScreenTextureRenderer()
         glEnableVertexAttribArray(1);
     glBindVertexArray(0);
 
+    // Square vertices
     constexpr std::array<glm::vec2, 12> vertices = {
         glm::vec2(-1, 1), glm::vec2(0, 1),  // top left
         glm::vec2(-1, -1), glm::vec2(0, 0), // bottom left
@@ -47,6 +50,7 @@ ScreenTextureRenderer::ScreenTextureRenderer()
 }
 
 void ScreenTextureRenderer::draw_texture(Blur blur) {
+    // Switch shader depending on what we're blurring
     switch (blur) {
         case Blur::Horizontal: this->blur_shader_horiz.bind(); break;
         case Blur::Vertical: this->blur_shader_verti.bind(); break;
@@ -57,3 +61,4 @@ void ScreenTextureRenderer::draw_texture(Blur blur) {
         glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
 }
+

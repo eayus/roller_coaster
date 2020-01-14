@@ -13,6 +13,8 @@ enum class ShaderType {
     Fragment,
 };
 
+
+// Turn our enum into the opengl constant
 constexpr GLenum shader_type_constant(ShaderType type) {
     switch (type) {
         case ShaderType::Vertex:   return GL_VERTEX_SHADER;
@@ -21,9 +23,13 @@ constexpr GLenum shader_type_constant(ShaderType type) {
 }
 
 
+// Class for a shader. Note this is not a complete program, this stores either
+// a vertex or fragment part. It is parameterised over the type at the type
+// level
 template<ShaderType type>
 class Shader {
 public:
+    // Compile one from source
     Shader<type>(const char* source) {
         auto gl_constant = shader_type_constant(type);
         this->shader = glCreateShader(gl_constant);
@@ -40,6 +46,7 @@ public:
         }
     };
 
+    // Read file, then compile it from source
     static Shader<type> from_filepath(const char* filepath) {
         std::ifstream file_stream(filepath);
         std::stringstream buffer;
@@ -49,15 +56,19 @@ public:
         return Shader<type>(source.c_str());
     }
 
+    // Cleanup afterwards
     ~Shader<type>() {
         glDeleteShader(this->shader);
     }
 
+    // Allow a total program to access the member variables
     friend class ShaderProgram;
 
 private:
+    // OpenGL handle for the program
     GLuint shader;
 };
 
+// Type aliases for convenience
 using VertexShader = Shader<ShaderType::Vertex>;
 using FragmentShader = Shader<ShaderType::Fragment>;

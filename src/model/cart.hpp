@@ -4,6 +4,8 @@
 #include <model/basic.hpp>
 #include <model/transform.hpp>
 
+// Function to generate the model for a single cart.
+
 namespace cart {
     constexpr glm::vec3 COLOR = glm::vec3(0.35f, 0.35f, 0.35f);
     constexpr float WIDTH = 0.8f;

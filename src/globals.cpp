@@ -1,5 +1,7 @@
 #include <globals.hpp>
 
+// Initialisation of globals
+
 namespace globals {
     float WindowDimensions::aspect_ratio() const {
         return static_cast<float>(WINDOW_DIMS.width)
