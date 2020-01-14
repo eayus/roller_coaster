@@ -6,3 +6,6 @@ textures are public domain, acquired from here: https://cc0textures.com/view?tex
 https://cc0textures.com/view?tex=Marble05
 
 texture loading "stb_image.h" acquired from here: https://github.com/nothings/stb/blob/master/stb_image.h
+
+
+TODO: add clang to path

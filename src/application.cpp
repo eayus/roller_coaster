@@ -21,6 +21,7 @@
 #include <ui/font.hpp>
 #include <ui/text.hpp>
 #include <ui/button.hpp>
+#include <shadow_map.hpp>
 
 void gl_error_callback(
     GLenum source,
@@ -159,6 +160,15 @@ void Application::main_loop() {
     glm::mat4 light_proj = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 100.0f);
     glm::mat4 light_view = glm::lookAt(light_pos, glm::vec3(0), glm::vec3(0, 0, 1));
 
+    ShaderProgram shader_map_shader(
+        VertexShader::from_filepath("res/shaders/shadow_map.vert"),
+        FragmentShader::from_filepath("res/shaders/shadow_map.frag")
+    );
+    shader_map_shader.bind();
+    shader_map_shader.set_uniform_mat4("light_matrix", light_proj * light_view);
+
+    ShadowMap shadow_map;
+
 
     while (!glfwWindowShouldClose(this->window)) {
 
@@ -176,15 +186,26 @@ void Application::main_loop() {
         for (auto& cart : carts) cart.update();
         auto cart_pos = carts[0].calc_position();
 
+    
+        auto render_scene = [&](ShaderProgram& shader) {
+            shader.bind();
+            shader.set_uniform_mat4("model_matrix", glm::mat4(1.0f));
+            main_coaster.draw();
+            grnd.draw();
+            for (auto& cart : carts) cart.draw(shader);
+        };
+
+        shadow_map.bind_as_target();
+            glClear(GL_DEPTH_BUFFER_BIT);
+            render_scene(shader_map_shader);
+        shadow_map.unbind_as_target();
+
+
         size_t vs_target = 0;
 
         vs[vs_target].bind_as_target();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            colored_mesh_shader.bind();
-            colored_mesh_shader.set_uniform_mat4("model_matrix", glm::mat4(1.0f));
-            main_coaster.draw();
-            grnd.draw();
-            for (auto& cart : carts) cart.draw(colored_mesh_shader);
+            render_scene(colored_mesh_shader);
 
         vs_target = 1;
 
