@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <model/transform.hpp>
 #include <model/rails/curved.hpp>
+#include <model/track_type.hpp>
 
 #include <model/rails/path.hpp>
 
@@ -20,7 +21,7 @@ namespace tracks::curved {
             );
         }
 
-        constexpr Rotation calc_rotation(float percent) {
+        constexpr Rotation calc_rotation(float percent, TrackType prev_type, TrackType next_type) {
             return Rotation(
                 percent * glm::radians(90.0f),
                 0.0f

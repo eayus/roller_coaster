@@ -55,21 +55,24 @@ Application::Application() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
-    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    /*GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* video_mode = glfwGetVideoMode(monitor);
 
-    std::cout << video_mode->width << ", " << video_mode->height << std::endl;
+    std::cout << video_mode->width << ", " << video_mode->height << std::endl;*/
+
+    constexpr int DEFAULT_WIN_WIDTH = 1440;
+    constexpr int DEFAULT_WIN_HEIGHT = 810;
 
     this->window = glfwCreateWindow(
-        video_mode->width,
-        video_mode->height,
+        DEFAULT_WIN_WIDTH,//video_mode->width,
+        DEFAULT_WIN_HEIGHT,//video_mode->height,
         "Hello World",
-        monitor,
+        nullptr,//monitor,
         nullptr
     );
 
-    globals::WINDOW_DIMS.width = video_mode->width;
-    globals::WINDOW_DIMS.height = video_mode->height;
+    globals::WINDOW_DIMS.width = DEFAULT_WIN_WIDTH;
+    globals::WINDOW_DIMS.height = DEFAULT_WIN_HEIGHT;
 
     glfwMakeContextCurrent(this->window);
     glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -149,11 +152,28 @@ void Application::main_loop() {
 
     Font fira_mono("res/fonts/fira_mono_regular.png");
 
-    Button resume_button(glm::vec2(1920.0f * 0.5f, 600.0f), glm::vec2(380.0f, 80.0f));
-    Text resume_text("resume game", fira_mono, glm::vec2(790, 585));
+    
+    float screen_center_x = static_cast<float>(globals::WINDOW_DIMS.width) * 0.5f;
 
-    Button quit_button(glm::vec2(1920.0f * 0.5f, 480.0f), glm::vec2(380.0f, 80.0f));
-    Text quit_text("quit game", fira_mono, glm::vec2(820, 465));
+    Button resume_button(
+        glm::vec2(screen_center_x, 500.0f),
+        glm::vec2(380.0f, 80.0f)
+    );
+    Text resume_text(
+        "resume game",
+        fira_mono,
+        glm::vec2(screen_center_x - 165.0f, 500.0f - 16.0f)
+    );
+
+    Button quit_button(
+        glm::vec2(screen_center_x, 300.0f),
+        glm::vec2(380.0f, 80.0f)
+    );
+    Text quit_text(
+        "quit game",
+        fira_mono,
+        glm::vec2(screen_center_x - 140.0f, 300.0f - 16.0f)
+    );
 
 
     // Set up matrices for rendering scene from light's POV

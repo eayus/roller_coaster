@@ -105,7 +105,16 @@ Rotation Cart::calc_rotation() const {
 
     const auto percent = this->excess_distance / track_len;
 
-    Rotation rot = tracks::calc_rotation(track_type)(percent);
+    int previous_track_index = this->track_num - 1;
+    if (previous_track_index < 0) previous_track_index = this->track_sequence.size() - 1;
+
+    int next_track_index = this->track_num + 1;
+    if (next_track_index >= this->track_sequence.size()) next_track_index = 0;
+
+    const auto prev_track_type = this->track_sequence.at(previous_track_index).type;
+    const auto next_track_type = this->track_sequence.at(next_track_index).type;
+
+    Rotation rot = tracks::calc_rotation(track_type)(percent, prev_track_type, next_track_type);
 
     if (track_seg.direction == Direction::Left) rot.yaw -= glm::radians(90.0f);
     if (track_seg.direction == Direction::Right) rot.yaw += glm::radians(90.0f);

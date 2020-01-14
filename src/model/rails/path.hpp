@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <model/rails/config.hpp>
 #include <gcem/gcem.hpp>
+#include <model/track_type.hpp>
 
 using std_extras::Array;
 
@@ -41,22 +42,65 @@ constexpr glm::vec3 sloped_track_position(float percent) {
 }
 
 
-constexpr Rotation curved_track_rotation(float percent) {
+constexpr Rotation curved_track_rotation(float percent, TrackType prev_type, TrackType next_type) {
     return Rotation(
         -percent * glm::radians(90.0f),
         0.0f
     );
 }
 
-constexpr Rotation straight_track_rotation(float percent) {
+constexpr Rotation straight_track_rotation(float percent, TrackType prev_type, TrackType next_type) {
     return Rotation(
         0.0f,
         0.0f
     );
 }
 
-constexpr Rotation sloped_track_rotation(float percent) {
-    percent *= 100.0f;
+constexpr Rotation sloped_track_rotation(float percent, TrackType prev_type, TrackType next_type) {
+
+    if (percent <= 0.2f && prev_type != TrackType::SlopeUp) {
+        return Rotation(0.0f, glm::radians(45.0f) * percent / 0.2f);
+    }
+
+    if (percent >= 0.8f && next_type != TrackType::SlopeUp) {
+        return Rotation(0.0f, glm::radians(45.0f) * (1.0f - percent) / 0.2f);
+    }
+
+    return Rotation(
+        0.0f,
+        glm::radians(45.0f)
+    );
+
+    /*percent *= 100.0f;
+
+    if (prev_type == TrackType::SlopeUp && next_type == TrackType::SlopeUp) {
+        return Rotation(
+            0.0f,
+            glm::radians(45.0f)
+        );
+    }
+
+    if (prev_type != TrackType::SlopeUp) {
+        if (percent <= 20.0f) {
+            float t = percent / 20.0f;
+
+            return Rotation(
+                0.0f,
+                glm::radians(45.0f) * t
+            );
+        }
+
+        return Rotation(0.0f, glm::radians(45.0f));
+    }
+
+    if (next_type != TrackType::SlopeUp) {
+        if (percent >= 80.0f) {
+            return Rotation(
+                0.0f,
+                glm::radians(45.0f) * (100.0f - percent) / 20.0f
+            );
+        }
+    }
 
     if (percent <= 20.0f) {
         float t = percent / 20.0f;
@@ -77,7 +121,7 @@ constexpr Rotation sloped_track_rotation(float percent) {
     return Rotation(
         0.0f,
         glm::radians(45.0f)
-    );
+    );*/
 }
 
 
@@ -114,56 +158,3 @@ constexpr Array<glm::vec3, 2> STRAIGHT_PATH = {
 // Curved Path
 constexpr float CURVED_PATH_RADIUS = TRACK_LENGTH / 2.0f;
 constexpr float CURVED_PATH_ANGLE_STEP = glm::radians(90.0f / static_cast<float>(NUM_PATH_SEGMENTS));
-
-/*constexpr std::array<glm::vec3, NUM_PATH_SEGMENTS> CURVED_PATH = {
-    glm::vec3(
-        (CURVED_PATH_RADIUS * gcem::cos(0.0f * CURVED_PATH_ANGLE_STEP)) - CURVED_PATH_RADIUS,
-        0.0f,
-        CURVED_PATH_RADIUS - (CURVED_PATH_RADIUS * gcem::sin(0.0f * CURVED_PATH_ANGLE_STEP))
-    ),
-    glm::vec3(
-        (CURVED_PATH_RADIUS * gcem::cos(1.0f * CURVED_PATH_ANGLE_STEP)) - CURVED_PATH_RADIUS,
-        0.0f,
-        CURVED_PATH_RADIUS - (CURVED_PATH_RADIUS * gcem::sin(1.0f * CURVED_PATH_ANGLE_STEP))
-    ),
-    glm::vec3(
-        (CURVED_PATH_RADIUS * gcem::cos(2.0f * CURVED_PATH_ANGLE_STEP)) - CURVED_PATH_RADIUS,
-        0.0f,
-        CURVED_PATH_RADIUS - (CURVED_PATH_RADIUS * gcem::sin(2.0f * CURVED_PATH_ANGLE_STEP))
-    ),
-    glm::vec3(
-        (CURVED_PATH_RADIUS * gcem::cos(3.0f * CURVED_PATH_ANGLE_STEP)) - CURVED_PATH_RADIUS,
-        0.0f,
-        CURVED_PATH_RADIUS - (CURVED_PATH_RADIUS * gcem::sin(3.0f * CURVED_PATH_ANGLE_STEP))
-    ),
-    glm::vec3(
-        (CURVED_PATH_RADIUS * gcem::cos(4.0f * CURVED_PATH_ANGLE_STEP)) - CURVED_PATH_RADIUS,
-        0.0f,
-        CURVED_PATH_RADIUS - (CURVED_PATH_RADIUS * gcem::sin(4.0f * CURVED_PATH_ANGLE_STEP))
-    ),
-    glm::vec3(
-        (CURVED_PATH_RADIUS * gcem::cos(5.0f * CURVED_PATH_ANGLE_STEP)) - CURVED_PATH_RADIUS,
-        0.0f,
-        CURVED_PATH_RADIUS - (CURVED_PATH_RADIUS * gcem::sin(5.0f * CURVED_PATH_ANGLE_STEP))
-    ),
-    glm::vec3(
-        (CURVED_PATH_RADIUS * gcem::cos(6.0f * CURVED_PATH_ANGLE_STEP)) - CURVED_PATH_RADIUS,
-        0.0f,
-        CURVED_PATH_RADIUS - (CURVED_PATH_RADIUS * gcem::sin(6.0f * CURVED_PATH_ANGLE_STEP))
-    ),
-    glm::vec3(
-        (CURVED_PATH_RADIUS * gcem::cos(7.0f * CURVED_PATH_ANGLE_STEP)) - CURVED_PATH_RADIUS,
-        0.0f,
-        CURVED_PATH_RADIUS - (CURVED_PATH_RADIUS * gcem::sin(7.0f * CURVED_PATH_ANGLE_STEP))
-    ),
-    glm::vec3(
-        (CURVED_PATH_RADIUS * gcem::cos(8.0f * CURVED_PATH_ANGLE_STEP)) - CURVED_PATH_RADIUS,
-        0.0f,
-        CURVED_PATH_RADIUS - (CURVED_PATH_RADIUS * gcem::sin(8.0f * CURVED_PATH_ANGLE_STEP))
-    ),
-    glm::vec3(
-        (CURVED_PATH_RADIUS * gcem::cos(9.0f * CURVED_PATH_ANGLE_STEP)) - CURVED_PATH_RADIUS,
-        0.0f,
-        CURVED_PATH_RADIUS - (CURVED_PATH_RADIUS * gcem::sin(9.0f * CURVED_PATH_ANGLE_STEP))
-    ),
-};*/

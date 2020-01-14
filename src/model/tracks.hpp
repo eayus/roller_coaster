@@ -13,8 +13,10 @@
 #include <tracks/sloped.hpp>
 #include <tracks/curved.hpp>
 
+#include <model/track_type.hpp>
+
 using PositionFunc = glm::vec3 (*)(float);
-using RotationFunc = Rotation (*)(float);
+using RotationFunc = Rotation (*)(float, TrackType, TrackType);
 
 struct TrackData {
     constexpr TrackData(ModelRef model, PositionFunc calc_position, RotationFunc calc_rotation, float length, std::pair<glm::ivec3, Direction> relative_finish)
@@ -30,15 +32,6 @@ struct TrackData {
     float length;
     std::pair<glm::ivec3, Direction> relative_finish; // pos, dir
 };
-
-enum class TrackType {
-    Forward,
-    CurveLeft,
-    SlopeUp,
-    SlopeDown,
-    CurveRight,
-};
-
 
 namespace tracks {
 

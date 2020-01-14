@@ -14,29 +14,16 @@ namespace tracks::sloped {
             return glm::vec3(0.0f, -percent, 0.5 - percent);
         }
 
-        constexpr Rotation calc_rotation(float percent) {
-            percent *= 100.0f;
-
-            if (percent <= 20.0f) {
-                float t = percent / 20.0f;
-
-                return Rotation(
-                    0.0f,
-                    glm::radians(-45.0f) * t
-                );
+        constexpr Rotation calc_rotation(float percent, TrackType prev_type, TrackType next_type) {
+            if (percent <= 0.2f && prev_type != TrackType::SlopeDown) {
+                return Rotation(0.0f, glm::radians(-45.0f) * percent / 0.2f);
             }
 
-            if (percent >= 80.0f) {
-                return Rotation(
-                    0.0f,
-                    glm::radians(-45.0f) * (100.0f - percent) / 20.0f
-                );
+            if (percent >= 0.8f && next_type != TrackType::SlopeDown) {
+                return Rotation(0.0f, glm::radians(-45.0f) * (1.0f - percent) / 0.2f);
             }
-            
-            return Rotation(
-                0.0f,
-                glm::radians(-45.0f)
-            );
+
+            return Rotation(0.0f, glm::radians(-45.0f));
         }
     }
 }
